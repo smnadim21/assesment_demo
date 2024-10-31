@@ -5,20 +5,12 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OfflineData {
-  final token = "token";
-  final theme = "theme";
-  final String cookie = "cookie";
-  final String odoo = "odoo";
-  final String adr1 = "adr1";
-  final String adr2 = "adr2";
-  final String geo = "geo";
-  final String _userInfo = "wwwslkasfifo";
-  final String _userId = "ufgakjjdfhh";
-  final String _tokenResponse = "eyjakjgfsf";
-  final String _credential = "creyjakjgfsf";
-  final String _isTestDb = "istsjabfa";
-  final String _isOdooTestDb = "istsoodjabfa";
-  final String _searchHistory = "slkseahtirypp";
+  final _token =
+      "lkasdlsfsd"; // used this random string to make data untraceable
+  final _session = "sdkfnlklas";
+  final theme = "thkkjskjfbeme";
+  final _isTestDb = "asdlfhlksdh";
+
   SharedPreferences sharedPreferences = Get.find<SharedPreferences>();
 
   static Future<SharedPreferences> getInstance() async {
@@ -26,11 +18,11 @@ class OfflineData {
   }
 
   void setToken(String value) {
-    sharedPreferences.setString(token, value);
+    sharedPreferences.setString(_token, value);
   }
 
   String getToken() {
-    return sharedPreferences.getString(token) ?? "";
+    return sharedPreferences.getString(_token) ?? "";
   }
 
   String getTheme() {
@@ -42,48 +34,12 @@ class OfflineData {
   }
 
   void setSession(Map session) {
-    sharedPreferences.setString(_userInfo, jsonEncode(session));
+    sharedPreferences.setString(_session, jsonEncode(session));
   }
 
   Map getSession() {
-   return jsonDecode( sharedPreferences.getString(_userInfo)??"{}");
-  }
-
-  void setOdoo(bool value) {
-    sharedPreferences.setBool(odoo, value);
-  }
-
-  void setAdr1(String value) {
-    sharedPreferences.setString(adr1, value);
-  }
-
-  void setAdr2(String value) {
-    sharedPreferences.setString(odoo, value);
-  }
-
-  void setGeo(String value) {
-    print("LTLNG >> $value");
-    sharedPreferences.setString(geo, value);
-  }
-
-  String? getGeo() {
-    String? geoS = sharedPreferences.getString(geo);
-    print(geoS);
-    return geoS;
-  }
-
-  bool isOdooLoggedIn() {
-    return sharedPreferences.getBool(odoo) ?? false;
-  }
-
-  String getCookie() {
-    return sharedPreferences.getString(cookie) ??
-        "session_id=41de13aa7c5fd27f22353e94c3596f77b50e7e82";
-  }
-
-  void setCookie(String? value) {
-    sharedPreferences.setString(
-        cookie, value ?? "session_id=41de13aa7c5fd27f22353e94c3596f77b50e7e82");
+    String sessionString = sharedPreferences.getString(_session) ?? "{}";
+    return jsonDecode(sessionString);
   }
 
   bool isTestDB() {
@@ -93,33 +49,4 @@ class OfflineData {
   void setTestDB(bool? value) {
     sharedPreferences.setBool(_isTestDb, value ?? false);
   }
-
-  bool isOdooTestDB() {
-    return sharedPreferences.getBool(_isOdooTestDb) ?? false;
-  }
-
-  void setOdooTestDB(bool? value) {
-    sharedPreferences.setBool(_isOdooTestDb, value ?? false);
-  }
-
-  setUserId(int uid) {
-    sharedPreferences.setInt(_userId, uid ?? 1);
-  }
-
-  int getUserId() {
-    return sharedPreferences.getInt(_userId) ?? 1;
-  }
-
-  void setSearchHistory(ListQueue<String> listQueue) {
-    String tobeSaved = jsonEncode(listQueue.toList());
-    sharedPreferences.setString(_searchHistory, tobeSaved);
-  }
-
-  ListQueue<String> getSearchHistory() {
-    ListQueue<String> listQueue = ListQueue(5);
-    String getSaved = sharedPreferences.getString(_searchHistory) ?? "[]";
-    List<String> data =
-    (jsonDecode(getSaved) as List).map((e) => e.toString()).toList();
-    listQueue.addAll(data);
-    return listQueue;
-  }}
+}

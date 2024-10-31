@@ -1,23 +1,33 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:nondito_soft_demo/app/data/user.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+import '../../../core/base_controller.dart';
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+class HomeController extends BaseController {
+  RxBool search = RxBool(false);
+  TextEditingController searchC = TextEditingController();
+
+  List<NonditoUser> _fixedList = [];
+  final RxList<NonditoUser> _filteredList = RxList([]);
+
+  RxList<NonditoUser> get uList => _filteredList;
+
+  set uList(List<NonditoUser> uList) {
+    _filteredList.value = uList;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void filterUser(String str) {
+    var filtered = _fixedList.where((p0) {
+      return (p0.name?.toLowerCase().contains(str.toLowerCase()) ?? false)
+          || (p0.phone?.toLowerCase().contains(str.toLowerCase()) ?? false)
+          || (p0.email?.toLowerCase().contains(str.toLowerCase()) ?? false);
+    }).toList();
+    uList = (str.isEmpty ? _fixedList : filtered);
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void setListData(List<NonditoUser>? data) {
+    uList = data ?? [];
+    _fixedList = data ?? [];
   }
-
-  void increment() => count.value++;
 }

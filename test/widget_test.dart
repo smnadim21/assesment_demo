@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nondito_soft_demo/app/core/app.dart';
 
 import 'package:nondito_soft_demo/main.dart';
 
