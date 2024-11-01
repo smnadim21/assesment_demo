@@ -67,31 +67,63 @@ class HomeView extends GetView<HomeController> {
         ],
       ),
       body: PageContainer(
-        child: FutureWidget(
-          future: controller.api.getUsers(),
-          shimmer: ShimmerList(
-              child: UserCard(
-            user: NonditoUser(),
-            isShimmer: true,
-          )),
-          buildWidget: (data) {
-            controller.setListData(data);
-            return Obx(() {
-              List<NonditoUser> userList = controller.uList;
-              return ListView.builder(
-                itemCount: userList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  NonditoUser user = userList[index];
-                  return InkWell(
-                    child: UserCard(user: user),
-                    onTap: () {
-                      Get.toNamed(Routes.DETAILS, arguments: {"id": user.id});
+        child: Obx(
+          () => Visibility(
+            visible: controller.reload.isFalse,
+            replacement: ShimmerList(
+                child: UserCard(
+                  user: NonditoUser(),
+                  isShimmer: true,
+                )),
+            child: FutureWidget(
+              future: controller.api.getUsers(),
+              shimmer: ShimmerList(
+                  child: UserCard(
+                user: NonditoUser(),
+                isShimmer: true,
+              )),
+              errorWidget: (snapshot, data) => Center(
+                child: Column(
+                  children: [
+                    Spacer(),
+                    const Text(
+                      "An Error Occurred",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                    const ColumnSpace(),
+                    ThemeButton(
+                      onPressed: () async {
+                        await controller.retry();
+                      },
+                      text: "Retry",
+                      wrap: true,
+                    ),
+                    Spacer()
+                  ],
+                ),
+              ),
+              buildWidget: (data) {
+                controller.setListData(data);
+                return Obx(() {
+                  List<NonditoUser> userList = controller.uList;
+                  return ListView.builder(
+                    itemCount: userList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      NonditoUser user = userList[index];
+                      return InkWell(
+                        child: UserCard(user: user),
+                        onTap: () {
+                          Get.toNamed(Routes.DETAILS,
+                              arguments: {"id": user.id});
+                        },
+                      );
                     },
                   );
-                },
-              );
-            });
-          },
+                });
+              },
+            ),
+          ),
         ),
       ),
       drawer: DrawerMenu(homeController: controller),

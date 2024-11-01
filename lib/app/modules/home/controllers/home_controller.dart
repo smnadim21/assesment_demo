@@ -13,15 +13,17 @@ class HomeController extends BaseController {
 
   RxList<NonditoUser> get uList => _filteredList;
 
+  RxBool reload = RxBool(false);
+
   set uList(List<NonditoUser> uList) {
     _filteredList.value = uList;
   }
 
   void filterUser(String str) {
     var filtered = _fixedList.where((p0) {
-      return (p0.name?.toLowerCase().contains(str.toLowerCase()) ?? false)
-          || (p0.phone?.toLowerCase().contains(str.toLowerCase()) ?? false)
-          || (p0.email?.toLowerCase().contains(str.toLowerCase()) ?? false);
+      return (p0.name?.toLowerCase().contains(str.toLowerCase()) ?? false) ||
+          (p0.phone?.toLowerCase().contains(str.toLowerCase()) ?? false) ||
+          (p0.email?.toLowerCase().contains(str.toLowerCase()) ?? false);
     }).toList();
     uList = (str.isEmpty ? _fixedList : filtered);
   }
@@ -30,4 +32,11 @@ class HomeController extends BaseController {
     uList = data ?? [];
     _fixedList = data ?? [];
   }
+
+  retry() async {
+    reload.value = true;
+    await fakeFuture(duration: 1);
+    reload.value = false;
+  }
+
 }
