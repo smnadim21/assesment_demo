@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:nondito_soft_demo/app/data/user.dart';
 
@@ -28,7 +27,7 @@ class ApiRepository {
         body: {'email': email, 'password': password});
 
     var value = response.body['token'] ?? "";
-    Map data = response.body['data'] ?? {};
+    Map data = response.body ?? {};
     apiProvider.offlineData.setToken(value);
     apiProvider.offlineData.setSession(data);
     print(data.prettyJson);
